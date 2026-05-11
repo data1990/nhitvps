@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 APP_NAME="nhitvps"
-REPO_URL="${REPO_URL:-}"
+REPO_URL="${REPO_URL:-https://github.com/data1990/nhitvps.git}"
 BRANCH="${BRANCH:-main}"
 INSTALL_DIR="${INSTALL_DIR:-/opt/nhitvps}"
 BACKEND_PORT="${BACKEND_PORT:-8080}"

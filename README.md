@@ -7,7 +7,7 @@ Mini VPS control panel with Fastify backend, React frontend, MariaDB, Nginx/data
 Create an empty GitHub repository first, then run from this project root:
 
 ```bash
-REPO_URL=https://github.com/<user>/<repo>.git ./scripts/push-github.sh
+REPO_URL=https://github.com/data1990/nhitvps.git ./scripts/push-github.sh
 ```
 
 On Windows PowerShell, use Git Bash or WSL for the `.sh` script, or run the equivalent commands:
@@ -15,7 +15,7 @@ On Windows PowerShell, use Git Bash or WSL for the `.sh` script, or run the equi
 ```bash
 git init
 git branch -M main
-git remote add origin https://github.com/<user>/<repo>.git
+git remote add origin https://github.com/data1990/nhitvps.git
 git add .
 git commit -m "Initial NhiTVPS source"
 git push -u origin main
@@ -26,9 +26,8 @@ git push -u origin main
 Recommended Ubuntu/Debian install using Docker Compose:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/<repo>/main/scripts/install-vps.sh -o install-vps.sh
+curl -fsSL https://raw.githubusercontent.com/data1990/nhitvps/main/scripts/install-vps.sh -o install-vps.sh
 chmod +x install-vps.sh
-REPO_URL=https://github.com/<user>/<repo>.git \
 PANEL_DOMAIN=panel.example.com \
 PANEL_EMAIL=admin@example.com \
 ./install-vps.sh
@@ -37,7 +36,7 @@ PANEL_EMAIL=admin@example.com \
 Without a domain, it installs the panel frontend on port `3000` and backend API on port `8080`:
 
 ```bash
-REPO_URL=https://github.com/<user>/<repo>.git ./install-vps.sh
+./install-vps.sh
 ```
 
 The installer creates `docker/.env`, generates secrets, installs Docker if needed, starts the Compose stack and optionally configures host Nginx + Certbot when `PANEL_DOMAIN` and `PANEL_EMAIL` are set.

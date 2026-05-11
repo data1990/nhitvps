@@ -24,9 +24,8 @@ curl http://127.0.0.1:3000/
 After pushing the source to GitHub, run this on an Ubuntu/Debian VPS:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/<user>/<repo>/main/scripts/install-vps.sh -o install-vps.sh
+curl -fsSL https://raw.githubusercontent.com/data1990/nhitvps/main/scripts/install-vps.sh -o install-vps.sh
 chmod +x install-vps.sh
-REPO_URL=https://github.com/<user>/<repo>.git \
 PANEL_DOMAIN=panel.example.com \
 PANEL_EMAIL=admin@example.com \
 ./install-vps.sh
