@@ -1,0 +1,14 @@
+.git
+.gitignore
+backend/.env
+backend/node_modules
+backend/dist
+backend/coverage
+backend/*.log
+logs
+docker/.env
+docker/*.local.yml
+node_modules
+dist
+coverage
+*.log

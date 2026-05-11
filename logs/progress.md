@@ -1,0 +1,125 @@
+# Progress Log
+
+## 2026-05-10
+
+- DONE:
+  - Phân tích yêu cầu hệ thống VPS control panel mini.
+  - Xác định module, architecture, dependency, risk và priority.
+  - Hoàn thành BE-001 Core backend scaffold.
+  - Hoàn thành BE-002 API error contract.
+  - Hoàn thành SEC-001 Command runner policy.
+  - Hoàn thành SEC-002 Path sandbox policy.
+  - Hoàn thành AUTH-001 User model and migration.
+  - Hoàn thành AUTH-002 Login/session API.
+  - Hoàn thành AUTH-003 RBAC middleware.
+  - Hoàn thành AUTH-004 2FA TOTP service.
+  - Hoàn thành FILE-001 File manager list/read.
+  - Hoàn thành FILE-002 File upload/download.
+  - Hoàn thành FILE-003 File edit/chmod/chown.
+  - Hoàn thành FILE-004 Zip/unzip.
+  - Hoàn thành NGINX-001 Nginx config model.
+  - Hoàn thành NGINX-002 Create website/vhost.
+  - Hoàn thành NGINX-003 Nginx reload/restart.
+  - Hoàn thành NGINX-004 Let's Encrypt SSL.
+  - Hoàn thành DB-001 Database manager model.
+  - Hoàn thành DB-002 Create database/user.
+  - Hoàn thành DB-003 Backup/restore database.
+  - Hoàn thành FW-001 Firewall rule model.
+  - Hoàn thành FW-002 UFW/iptables adapter.
+  - Hoàn thành MON-001 System metrics API.
+  - Hoàn thành MON-002 WebSocket metrics stream.
+  - Hoàn thành DEPLOY-001 Docker deployment.
+  - Hoàn thành CI-001 CI pipeline.
+  - Hoàn thành DOC-001 OpenAPI documentation.
+  - Hoàn thành FE-001 Frontend scaffold.
+  - Hoan thanh FE-002 Auth UI.
+  - Hoan thanh FE-003 File manager UI.
+  - Hoan thanh FE-004 Monitoring UI.
+  - Hoan thanh FE-005 Operations UI.
+  - Hoan thanh OPS-001 Auto backup scheduler.
+  - Hoan thanh OPS-002 Rollback manager.
+  - Hoan thanh SYS-001 System package installer cho Nginx/MySQL/MariaDB/UFW/Certbot.
+  - Them script push GitHub va script cai VPS tu dong bang Docker Compose, frontend Nginx container va bootstrap admin.
+  - Hoan thanh HOST-001 Host agent design.
+- FIXED:
+  - Sửa build TypeScript do test nằm ngoài `rootDir`.
+  - Sửa error handler nhận `unknown` đúng type Fastify.
+  - Chặn Vitest chạy lặp artefact generated bằng `vitest.config.ts`.
+- ADDED:
+  - Tài liệu architecture/modules/security.
+  - Backlog, roadmap, milestone 1, milestone 2.
+  - Backend Fastify TypeScript trong `/backend`.
+  - Health/readiness API.
+  - Security middleware: Helmet, CORS allowlist, rate limit.
+  - Env validation bằng Zod.
+  - Unit test health/not-found.
+  - API error response contract và request id header.
+  - Command runner allowlist dùng `spawn` không qua shell.
+  - Path sandbox chống traversal/symlink escape.
+  - Auth domain model và MariaDB/MySQL migration cho users/roles/permissions/sessions/2FA/audit.
+  - Auth login/logout/me API, scrypt password hasher, session token hash và httpOnly cookie.
+  - Authorization service và Fastify permission guard.
+  - TOTP service RFC 6238 và recovery code service.
+  - File Manager list/read API với allowed roots và RBAC `file:read`.
+  - File Manager upload/download/write/chmod/chown/zip/unzip APIs.
+  - Nginx domain model, validators và vhost renderer.
+  - Nginx API tạo/cập nhật vhost với backup config cũ.
+  - Nginx runtime API test/reload/restart.
+  - Nginx Let's Encrypt SSL API qua Certbot.
+  - Database manager domain model, validators và metadata migration.
+  - Database provisioning API tạo database/user/grant qua MySQL adapter.
+  - Database backup/restore API với checksum SHA-256.
+  - Firewall rule domain model, validators và metadata migration.
+  - Firewall UFW adapter với apply/status API và rollback khi apply lỗi giữa chừng.
+  - Monitoring system snapshot API cho CPU/RAM/disk/network/process/Docker detection.
+  - WebSocket realtime metrics stream cho snapshot system monitoring.
+  - Docker deployment gồm backend Dockerfile, compose stack, env mẫu và README vận hành.
+  - GitHub Actions CI cho backend test/build/audit và Docker compose/image validation.
+  - OpenAPI JSON endpoint và tài liệu API cho các module backend hiện có.
+  - Frontend React + Tailwind dashboard shell với API readiness status.
+  - Frontend login/logout/session bootstrap va protected dashboard shell.
+  - Frontend File Manager UI cho roots/list/read/write/upload/download/chmod/chown/zip/unzip.
+  - Frontend Monitoring UI cho snapshot system metrics va WebSocket stream.
+  - Frontend Operations UI cho Nginx, database va firewall workflows.
+  - Auto backup scheduler cho database list, Nginx config copy va retention policy.
+  - Rollback manager cho database restore va Nginx config restore voi audit JSONL.
+  - Host agent design cho boundary privileged operations.
+  - Dev-only admin seed cho in-memory auth repository.
+  - Milestone 3 cho frontend, operations, rollback và host agent.
+- SECURITY:
+  - Định nghĩa threat model ban đầu.
+  - Xác định command runner và path sandbox là P0.
+  - Redact header/body nhạy cảm trong logger.
+  - Nâng Vitest lên bản không còn audit vulnerability.
+  - `npm audit --audit-level=moderate` pass với 0 vulnerabilities.
+  - Command runner chặn unknown policy, suspicious argument và timeout.
+  - Path sandbox chặn path ngoài root và symlink escape.
+  - Auth schema không lưu plaintext password, dùng token/code hash và có session revoke fields.
+  - Login không trả password hash, session token chỉ lưu hash, disabled user bị từ chối.
+  - RBAC guard trả `AUTH_REQUIRED` khi thiếu session và `FORBIDDEN` khi thiếu quyền.
+  - 2FA dùng crypto random, timing-safe compare và recovery code hash.
+  - File Manager chặn traversal, chặn thiếu auth/quyền và giới hạn read size.
+  - Upload/write/archive có size limit, chmod/chown không gọi shell, unzip có zip-slip guard.
+  - Nginx renderer chặn domain/upstream/path unsafe trước khi render config.
+  - Nginx vhost writer ghi atomically, backup trước overwrite và cần RBAC `nginx:update`.
+  - Reload/restart luôn chạy `nginx -t` trước và đi qua CommandRunner allowlist.
+  - Certbot chạy qua CommandRunner allowlist, validate email/domain, chặn wildcard và reload Nginx sau khi cấp SSL thành công.
+  - Database manager chặn SQL injection qua identifier/user/host validator và không lưu plaintext password trong metadata schema.
+  - Database provisioning không dùng shell, tắt multiple statements, password đi qua parameterized SQL và response không trả plaintext password.
+  - Backup/restore chạy qua CommandRunner allowlist, không dùng shell redirection, không đưa database password vào command args và restore bị giới hạn trong backup sandbox.
+  - Firewall validators chặn IP/CIDR/country/port/rate limit không hợp lệ và shell metacharacter trước khi adapter FW-002 render lệnh hệ thống.
+  - UFW adapter không dùng shell, render args dạng array, chặn geo/ICMP chưa hỗ trợ và rollback bằng `ufw delete` cho rule đã apply.
+  - Monitoring snapshot không gọi shell, không trả env/secret và bảo vệ route bằng RBAC `monitoring:read`.
+  - WebSocket metrics stream yêu cầu RBAC `monitoring:read`, clamp interval và clear timer khi socket đóng.
+  - Docker runtime chạy non-root, không mount Docker socket/privileged mặc định và yêu cầu secret production qua env.
+  - CI dùng permissions `contents: read`, timeout, concurrency cancellation và audit gate.
+  - OpenAPI spec chỉ mô tả API, không expose secret và dùng session cookie security scheme.
+  - Frontend không lưu secret, gọi API bằng `credentials: include` và CI audit frontend dependencies.
+  - Auth UI dung httpOnly cookie flow qua `credentials: include`, khong luu session token trong frontend state.
+  - File Manager UI goi API qua httpOnly cookie, khong tu xu ly sandbox o client va de backend enforce RBAC/path policy.
+  - Monitoring UI dung session cookie/RBAC backend cho HTTP va WebSocket metrics stream.
+  - Operations UI gui thao tac privileged qua API backend co RBAC, CommandRunner va validators.
+  - Auto backup scheduler mac dinh tat, khi bat thi dung DatabaseBackupService va chi prune trong auto backup dir.
+  - Rollback manager sandbox backup dirs, tao pre-rollback backup truoc khi overwrite va khong ghi secret vao audit.
+  - Host agent design yeu cau backend/container mac dinh khong privileged va agent chi nhan allowlisted operation.
+  - Dev admin seed bi tat trong production va chi cap quyen qua RBAC `system:manage`.

@@ -1,0 +1,234 @@
+# Changelog
+
+## 2026-05-10
+
+- DONE:
+  - Khởi tạo tài liệu phân tích và kế hoạch phát triển dự án.
+  - Implement BE-001 Core backend scaffold.
+  - Implement BE-002 API error contract.
+  - Implement SEC-001 Command runner policy.
+  - Implement SEC-002 Path sandbox policy.
+  - Implement AUTH-001 User model and migration.
+  - Implement AUTH-002 Login/session API.
+  - Implement AUTH-003 RBAC middleware.
+  - Implement AUTH-004 2FA TOTP service.
+  - Implement FILE-001 File manager list/read.
+  - Implement FILE-002 File upload/download.
+  - Implement FILE-003 File edit/chmod/chown.
+  - Implement FILE-004 Zip/unzip.
+  - Implement NGINX-001 Nginx config model.
+  - Implement NGINX-002 Create website/vhost.
+  - Implement NGINX-003 Nginx reload/restart.
+  - Implement NGINX-004 Let's Encrypt SSL.
+  - Implement DB-001 Database manager model.
+  - Implement DB-002 Create database/user.
+  - Implement DB-003 Backup/restore database.
+  - Implement FW-001 Firewall rule model.
+  - Implement FW-002 UFW/iptables adapter.
+  - Implement MON-001 System metrics API.
+  - Implement MON-002 WebSocket metrics stream.
+  - Implement DEPLOY-001 Docker deployment.
+  - Implement CI-001 CI pipeline.
+  - Implement DOC-001 OpenAPI documentation.
+  - Implement FE-001 Frontend scaffold.
+  - Implement FE-002 Auth UI.
+  - Implement FE-003 File manager UI.
+  - Implement FE-004 Monitoring UI.
+  - Implement FE-005 Operations UI.
+  - Implement OPS-001 Auto backup scheduler.
+  - Implement OPS-002 Rollback manager.
+  - Complete HOST-001 Host agent design.
+  - Implement SYS-001 System package installer API and Settings UI.
+  - Add GitHub push helper, automated VPS installer, frontend production container and bootstrap admin env.
+  - Add development admin login seed.
+- FIXED:
+  - Build TypeScript không include test ngoài `src`.
+  - Error handler tương thích type `unknown` của Fastify.
+  - Test runner không chạy artefact generated.
+- ADDED:
+  - `docs/architecture.md`
+  - `docs/modules.md`
+  - `docs/security.md`
+  - `tasks/backlog.md`
+  - `tasks/roadmap.md`
+  - `tasks/milestone_1.md`
+  - `tasks/milestone_2.md`
+  - `logs/progress.md`
+  - `logs/changelog.md`
+  - `backend/package.json`
+  - `backend/package-lock.json`
+  - `backend/tsconfig.json`
+  - `backend/vitest.config.ts`
+  - `backend/.env.example`
+  - `backend/.gitignore`
+  - `backend/src/app.ts`
+  - `backend/src/server.ts`
+  - `backend/src/config/env.ts`
+  - `backend/src/plugins/security.ts`
+  - `backend/src/shared/errors/app-error.ts`
+  - `backend/src/shared/errors/error-handler.ts`
+  - `backend/src/modules/health/health.routes.ts`
+  - `backend/tests/health.test.ts`
+  - `backend/src/shared/http/api-error.ts`
+  - `backend/src/plugins/request-id.ts`
+  - `backend/src/infrastructure/command/command-runner.ts`
+  - `backend/src/infrastructure/command/index.ts`
+  - `backend/src/security/path-sandbox.ts`
+  - `backend/src/security/index.ts`
+  - `backend/tests/command-runner.test.ts`
+  - `backend/tests/path-sandbox.test.ts`
+  - `backend/src/modules/auth/domain/auth.types.ts`
+  - `backend/src/modules/auth/domain/permissions.ts`
+  - `backend/src/modules/auth/domain/index.ts`
+  - `backend/src/modules/auth/index.ts`
+  - `backend/src/infrastructure/database/migrations/001_auth_schema.sql`
+  - `backend/tests/auth-domain.test.ts`
+  - `backend/src/plugins/cookie.ts`
+  - `backend/src/modules/auth/application/auth.repository.ts`
+  - `backend/src/modules/auth/application/auth.service.ts`
+  - `backend/src/modules/auth/application/password-hasher.ts`
+  - `backend/src/modules/auth/application/session-token-service.ts`
+  - `backend/src/modules/auth/infrastructure/in-memory-auth.repository.ts`
+  - `backend/src/modules/auth/http/auth.routes.ts`
+  - `backend/tests/auth-service.test.ts`
+  - `backend/src/modules/auth/application/authorization.service.ts`
+  - `backend/src/modules/auth/http/rbac.guard.ts`
+  - `backend/tests/rbac.test.ts`
+  - `backend/src/modules/auth/application/totp.service.ts`
+  - `backend/src/modules/auth/application/recovery-code.service.ts`
+  - `backend/tests/totp.test.ts`
+  - `backend/src/modules/file-manager/application/file-manager.service.ts`
+  - `backend/src/modules/file-manager/http/file-manager.routes.ts`
+  - `backend/src/modules/file-manager/index.ts`
+  - `backend/tests/file-manager.test.ts`
+  - `backend/src/plugins/multipart.ts`
+  - `backend/src/modules/nginx/domain/nginx.types.ts`
+  - `backend/src/modules/nginx/domain/nginx.validators.ts`
+  - `backend/src/modules/nginx/application/nginx-vhost.renderer.ts`
+  - `backend/src/modules/nginx/index.ts`
+  - `backend/tests/nginx.test.ts`
+  - `backend/src/modules/nginx/application/nginx-config.service.ts`
+  - `backend/src/modules/nginx/http/nginx.routes.ts`
+  - `backend/tests/nginx-routes.test.ts`
+  - `backend/src/modules/nginx/application/nginx-runtime.service.ts`
+  - `backend/tests/nginx-runtime.test.ts`
+  - `backend/src/modules/nginx/application/lets-encrypt.service.ts`
+  - `backend/tests/lets-encrypt.test.ts`
+  - `tasks/NGINX-004_lets_encrypt_ssl.md`
+  - `backend/src/modules/database/domain/database.types.ts`
+  - `backend/src/modules/database/domain/database.validators.ts`
+  - `backend/src/modules/database/index.ts`
+  - `backend/src/infrastructure/database/migrations/002_database_manager_schema.sql`
+  - `backend/tests/database-model.test.ts`
+  - `tasks/DB-001_database_manager_model.md`
+  - `backend/src/modules/database/application/database-sql.executor.ts`
+  - `backend/src/modules/database/application/database-provisioning.service.ts`
+  - `backend/src/modules/database/http/database.routes.ts`
+  - `backend/tests/database-provisioning.test.ts`
+  - `backend/tests/database-routes.test.ts`
+  - `tasks/DB-002_create_database_user.md`
+  - `backend/src/modules/database/application/database-backup.service.ts`
+  - `backend/tests/database-backup.test.ts`
+  - `backend/tests/database-backup-routes.test.ts`
+  - `tasks/DB-003_backup_restore_database.md`
+  - `backend/src/modules/firewall/domain/firewall.types.ts`
+  - `backend/src/modules/firewall/domain/firewall.validators.ts`
+  - `backend/src/modules/firewall/index.ts`
+  - `backend/src/infrastructure/database/migrations/003_firewall_schema.sql`
+  - `backend/tests/firewall-model.test.ts`
+  - `tasks/FW-001_firewall_rule_model.md`
+  - `backend/src/modules/firewall/application/ufw-firewall.adapter.ts`
+  - `backend/src/modules/firewall/http/firewall.routes.ts`
+  - `backend/tests/firewall-adapter.test.ts`
+  - `backend/tests/firewall-routes.test.ts`
+  - `tasks/FW-002_ufw_iptables_adapter.md`
+  - `backend/src/modules/monitoring/application/system-metrics.service.ts`
+  - `backend/src/modules/monitoring/http/monitoring.routes.ts`
+  - `backend/src/modules/monitoring/index.ts`
+  - `backend/tests/monitoring-service.test.ts`
+  - `backend/tests/monitoring-routes.test.ts`
+  - `tasks/MON-001_system_metrics_api.md`
+  - `backend/src/plugins/websocket.ts`
+  - `backend/tests/monitoring-stream.test.ts`
+  - `tasks/MON-002_websocket_metrics_stream.md`
+  - `.dockerignore`
+  - `docker/backend.Dockerfile`
+  - `docker/compose.yml`
+  - `docker/.env.example`
+  - `docker/README.md`
+  - `tasks/DEPLOY-001_docker_deployment.md`
+  - `.github/workflows/ci.yml`
+  - `tasks/CI-001_ci_pipeline.md`
+  - `backend/src/modules/docs/openapi.ts`
+  - `backend/src/modules/docs/docs.routes.ts`
+  - `backend/src/modules/docs/index.ts`
+  - `backend/tests/docs-routes.test.ts`
+  - `docs/api.md`
+  - `tasks/DOC-001_openapi_documentation.md`
+  - `frontend/package.json`
+  - `frontend/package-lock.json`
+  - `frontend/index.html`
+  - `frontend/tsconfig.json`
+  - `frontend/tsconfig.node.json`
+  - `frontend/vite.config.ts`
+  - `frontend/tailwind.config.js`
+  - `frontend/postcss.config.js`
+  - `frontend/.env.example`
+  - `frontend/.gitignore`
+  - `frontend/src/main.tsx`
+  - `frontend/src/App.tsx`
+  - `frontend/src/styles.css`
+  - `frontend/src/vite-env.d.ts`
+  - `tasks/FE-001_frontend_scaffold.md`
+  - `tasks/FE-002_auth_ui.md`
+  - `tasks/FE-003_file_manager_ui.md`
+  - `tasks/FE-004_monitoring_ui.md`
+  - `tasks/FE-005_operations_ui.md`
+  - `tasks/OPS-001_auto_backup_scheduler.md`
+  - `backend/src/modules/operations/application/auto-backup-scheduler.ts`
+  - `backend/src/modules/operations/index.ts`
+  - `backend/tests/auto-backup-scheduler.test.ts`
+  - `tasks/OPS-002_rollback_manager.md`
+  - `backend/src/modules/operations/application/rollback-manager.ts`
+  - `backend/tests/rollback-manager.test.ts`
+  - `docs/host-agent.md`
+  - `tasks/HOST-001_host_agent_design.md`
+  - `backend/src/modules/auth/infrastructure/dev-auth.repository.ts`
+  - `backend/tests/dev-auth-repository.test.ts`
+  - `tasks/milestone_3.md`
+- SECURITY:
+  - Ghi nhận các nhóm rủi ro: command injection, SQL injection, path traversal, XSS, CSRF, privilege escalation, session hijacking.
+  - Thêm Helmet, CORS allowlist, rate limit, logger redaction.
+  - Audit dependency sạch: 0 vulnerabilities mức moderate trở lên.
+  - Command runner dùng allowlist, argument array, timeout và output cap.
+  - Path sandbox dùng normalize/resolve/realpath để chống traversal và symlink escape.
+  - Auth schema có password hash, token hash, recovery code hash, lockout, revoke session và audit log.
+  - Auth API dùng scrypt hash, SHA-256 token hash, httpOnly sameSite cookie và generic invalid credential error.
+  - RBAC hỗ trợ exact permission, module manage và system manage.
+  - 2FA TOTP dùng RFC 6238, base32 secret và recovery code hash.
+  - File Manager list/read được bảo vệ bằng RBAC và PathSandbox.
+  - File Manager upload/download/write/chmod/chown/zip/unzip được bảo vệ bằng RBAC và PathSandbox.
+  - Zip-slip guard kiểm tra raw archive entry trước khi extract.
+  - Nginx vhost renderer chỉ render config từ model đã validate.
+  - Nginx vhost API ghi config atomically, backup file cũ và bảo vệ bằng RBAC.
+  - Nginx runtime dùng CommandRunner allowlist và RBAC `nginx:execute`.
+  - Let's Encrypt chỉ chạy Certbot qua policy `certbot:nginx`, validate email/domain, chặn wildcard và yêu cầu RBAC `nginx:update`.
+  - Database metadata schema không lưu plaintext password; identifier/user/host phải qua validator trước khi DB-002 sinh SQL.
+  - Database provisioning dùng parameterized SQL cho password/user/host, quote identifier sau validation và yêu cầu RBAC `database:create`.
+  - Backup/restore database dùng CommandRunner policy, checksum SHA-256, sandbox backup dir và tệp defaults tạm để tránh lộ password trong args.
+  - Firewall model validate toàn bộ target/action/port/rate limit trước khi chuyển sang tầng adapter hệ thống.
+  - Firewall UFW adapter chạy qua CommandRunner allowlist, có rollback và RBAC `firewall:read`/`firewall:update`.
+  - Monitoring API dùng Node API và `/proc` thay vì shell, route yêu cầu RBAC `monitoring:read`.
+  - Monitoring WebSocket stream dùng session/RBAC `monitoring:read`, clamp interval query và không expose secret.
+  - Docker deployment mặc định chạy backend bằng user riêng, không privileged và không hard-code secret production.
+  - CI workflow giới hạn quyền repository ở read-only, chạy audit dependency và kiểm tra Docker deployment.
+  - API docs route công khai chỉ trả metadata tài liệu, các route quản trị vẫn yêu cầu session/RBAC.
+  - Frontend scaffold không hard-code secret, dùng env `VITE_API_BASE_URL` và request `credentials: include`.
+  - Frontend Auth UI khong luu session token, login/logout/me deu dung httpOnly cookie flow voi `credentials: include`.
+  - Frontend File Manager UI khong bypass backend policy; moi thao tac file di qua API co RBAC, PathSandbox va validation.
+  - Frontend Monitoring UI dung API va WebSocket backend co session/RBAC, khong doc env/secret tu client.
+  - Frontend Operations UI chi goi API backend cho Nginx/database/firewall, khong bypass CommandRunner/RBAC/validator.
+  - Auto backup scheduler mac dinh disabled, khong goi shell truc tiep va retention chi xoa trong backup sandbox duoc cau hinh.
+  - Rollback manager chi doc backup trong sandbox dirs, tao pre-rollback backup va audit thanh cong bang JSONL khong secret.
+  - Host agent design tach privileged operations khoi backend/container mac dinh, dung allowlist operation va audit rieng.
+  - Development admin seed chi hoat dong ngoai production, khong tao tai khoan mac dinh khi `NODE_ENV=production`.

@@ -1,0 +1,95 @@
+name: nhitvps
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+    image: nhitvps/frontend:local
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://127.0.0.1/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - nhitvps
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    image: nhitvps/backend:local
+    restart: unless-stopped
+    env_file:
+      - ${NHITVPS_ENV_FILE:-./.env}
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 8080
+      MYSQL_HOST: mariadb
+      MYSQL_PORT: 3306
+      MYSQL_ADMIN_PASSWORD: ${MARIADB_ROOT_PASSWORD:?set MARIADB_ROOT_PASSWORD in docker/.env}
+      DATABASE_BACKUP_DIR: /var/lib/nhitvps/backups/databases
+      FILE_MANAGER_ROOTS: /var/www
+      MONITOR_DISK_PATHS: /app/backend,/var/www,/var/lib/nhitvps/backups/databases
+      DOCKER_SOCKET_PATH: /var/run/docker.sock
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+    volumes:
+      - nhitvps_database_backups:/var/lib/nhitvps/backups/databases
+      - nhitvps_www:/var/www
+      - nhitvps_nginx_sites_available:/etc/nginx/sites-available
+      - nhitvps_nginx_sites_enabled:/etc/nginx/sites-enabled
+      - nhitvps_nginx_logs:/var/log/nginx
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:8080/api/v1/ready >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - nhitvps
+
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?set MARIADB_ROOT_PASSWORD in docker/.env}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-nhitvps}
+      MARIADB_AUTO_UPGRADE: "1"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-name-resolve
+    volumes:
+      - nhitvps_mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p\"$${MARIADB_ROOT_PASSWORD}\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - nhitvps
+
+networks:
+  nhitvps:
+    driver: bridge
+
+volumes:
+  nhitvps_mariadb_data:
+  nhitvps_database_backups:
+  nhitvps_www:
+  nhitvps_nginx_sites_available:
+  nhitvps_nginx_sites_enabled:
+  nhitvps_nginx_logs:
