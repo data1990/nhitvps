@@ -45,6 +45,7 @@ install_base_packages() {
     curl \
     git \
     gnupg \
+    lsb-release \
     openssl
 }
 
@@ -55,11 +56,54 @@ install_docker() {
   fi
 
   log "Installing Docker and Docker Compose plugin"
-  as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io docker-compose-plugin
+  if ! apt-cache show docker-compose-plugin >/dev/null 2>&1; then
+    install_docker_official_repository
+  fi
+
+  if apt-cache show docker-ce >/dev/null 2>&1; then
+    as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      docker-ce \
+      docker-ce-cli \
+      containerd.io \
+      docker-buildx-plugin \
+      docker-compose-plugin
+  elif apt-cache show docker-compose-plugin >/dev/null 2>&1; then
+    as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io docker-compose-plugin
+  else
+    as_root env DEBIAN_FRONTEND=noninteractive apt-get install -y docker.io docker-compose
+  fi
+
   as_root systemctl enable --now docker
 
   if [[ "${EUID}" -ne 0 ]]; then
     as_root usermod -aG docker "$USER" || true
+  fi
+}
+
+install_docker_official_repository() {
+  log "Adding Docker official apt repository"
+  local codename
+  codename="$(. /etc/os-release && printf '%s' "${VERSION_CODENAME:-}")"
+  [[ -n "$codename" ]] || die "Cannot detect Ubuntu/Debian codename for Docker repository."
+
+  as_root install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | as_root gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  as_root chmod a+r /etc/apt/keyrings/docker.gpg
+
+  printf 'deb [arch=%s signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu %s stable\n' \
+    "$(dpkg --print-architecture)" \
+    "$codename" | as_root tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+  as_root apt-get update
+}
+
+compose() {
+  if docker compose version >/dev/null 2>&1; then
+    as_root docker compose "$@"
+  elif command -v docker-compose >/dev/null 2>&1; then
+    as_root docker-compose "$@"
+  else
+    die "Docker Compose is not installed."
   fi
 }
 
@@ -161,18 +205,18 @@ set_env_if_placeholder() {
 
 start_stack() {
   log "Building and starting Docker Compose stack"
-  as_root docker compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" up --build -d
+  compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" up --build -d
 
   log "Waiting for backend readiness"
   for _ in $(seq 1 40); do
     if curl --fail --silent "http://127.0.0.1:${BACKEND_PORT}/api/v1/ready" >/dev/null; then
-      as_root docker compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" ps
+      compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" ps
       return
     fi
     sleep 3
   done
 
-  as_root docker compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" logs --tail=120 backend || true
+  compose --env-file "$INSTALL_DIR/docker/.env" -f "$INSTALL_DIR/docker/compose.yml" logs --tail=120 backend || true
   die "Backend did not become ready on port ${BACKEND_PORT}."
 }
 
@@ -242,7 +286,6 @@ Deployment directory:
 Useful commands:
   docker compose --env-file ${INSTALL_DIR}/docker/.env -f ${INSTALL_DIR}/docker/compose.yml ps
   docker compose --env-file ${INSTALL_DIR}/docker/.env -f ${INSTALL_DIR}/docker/compose.yml logs -f backend
-  docker compose --env-file ${INSTALL_DIR}/docker/.env -f ${INSTALL_DIR}/docker/compose.yml pull
   docker compose --env-file ${INSTALL_DIR}/docker/.env -f ${INSTALL_DIR}/docker/compose.yml up --build -d
 
 EOF
