@@ -14,12 +14,12 @@ export async function registerSecurityPlugins(app: FastifyInstance): Promise<voi
 
   await app.register(cors, {
     origin: (origin, callback) => {
-      if (!origin && env.NODE_ENV !== "production") {
+      if (!origin) {
         callback(null, true);
         return;
       }
 
-      if (origin && env.CORS_ORIGINS.includes(origin)) {
+      if (env.CORS_ORIGINS.includes(origin)) {
         callback(null, true);
         return;
       }
@@ -35,4 +35,3 @@ export async function registerSecurityPlugins(app: FastifyInstance): Promise<voi
     allowList: ["127.0.0.1"],
   });
 }
-
